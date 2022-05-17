@@ -1,0 +1,18 @@
+[
+  {
+    "id": "b315e000-bca1-438d-809c-1edd5e995c6d",
+    "name": "New Meet",
+    "responsiblePersonId": "8bd2c5d3-a574-48ca-a3b0-84af47d41b1b",
+    "description": "short meeting",
+    "category": "CodeMonkey",
+    "type": "InPerson",
+    "startDateTime": "2022-05-17 17:40:00",
+    "endDateTime": "2022-05-17 18:40:00",
+    "attendees": [
+      {
+        "id": "a9caad18-e928-4ad1-99dd-9c4ac55e061a",
+        "name": "Jonas Jonaitis"
+      }
+    ]
+  }
+]
