@@ -44,7 +44,6 @@ public class MeetingDataAccessService implements MeetingDao{
             return new ResponseEntity<>(Utility.ERR_DELETE_MEETING_RESTRICTED, HttpStatus.BAD_REQUEST);
 
         Holder.getActiveMeetings().removeIf(m -> m.getId().equals(meetingId));
-        System.out.println(Holder.getActiveMeetings().size());
 
         return new ResponseEntity<>(Utility.MSG_DELETE_SUCCESS, HttpStatus.OK);
     }
@@ -122,39 +121,46 @@ public class MeetingDataAccessService implements MeetingDao{
     }
 
     @Override
-    public ResponseEntity<List<Meeting>> listAndFilterMeetings(String description, String responsiblePersonId, String category, String type, String startDateTime, String endDateTime, Integer attendeeNumber) {
+    public ResponseEntity<List<Meeting>> listAndFilterMeetings(List<Object> filters) {
         Stream<Meeting> filteringStream = Holder.getActiveMeetings().stream();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-        //Filtering by each parameter, if it is not empty
+        //Filtering by each parameter, if it is not null
+        String description = (String)filters.get(0);
+        String responsiblePersonId = (String)filters.get(1);
+        String category = (String)filters.get(2);
+        String type = (String)filters.get(3);
+        String startDateTime = (String)filters.get(4);
+        String endDateTime = (String)filters.get(5);
+        Integer attendeeNumber = (Integer)filters.get(6);
 
-        if(!description.equals("")) {
+        if(description != null) {
             Predicate<Meeting> descriptionPredicate = obj -> obj.getDescription().toLowerCase().contains(description.toLowerCase());
             filteringStream = filteringStream.filter(descriptionPredicate);
         }
-        if(!responsiblePersonId.equals("")) {
+        if(responsiblePersonId != null) {
             Predicate<Meeting> responsiblePersonPredicate = obj -> obj.getResponsiblePersonId().equals(UUID.fromString(responsiblePersonId));
             filteringStream = filteringStream.filter(responsiblePersonPredicate);
         }
-        if(!category.equals("")) {
+        if(category != null) {
             Predicate<Meeting> categoryPredicate = obj -> obj.getCategory().equals(category);
             filteringStream = filteringStream.filter(categoryPredicate);
         }
-        if(!type.equals("")) {
+        if(type != null) {
             Predicate<Meeting> typePredicate = obj -> obj.getType().equals(type);
             filteringStream = filteringStream.filter(typePredicate);
         }
-        if(!startDateTime.equals("")) {
+        if(startDateTime != null) {
             LocalDateTime startDate = LocalDateTime.parse(startDateTime, formatter);
             Predicate<Meeting> startDateTimePredicate = obj -> LocalDateTime.parse(obj.getStartDateTime(), formatter).isAfter(startDate) || obj.getStartDateTime().equals(startDateTime);
             filteringStream = filteringStream.filter(startDateTimePredicate);
         }
-        if(!endDateTime.equals("")) {
+        if(endDateTime != null) {
             LocalDateTime endDate = LocalDateTime.parse(endDateTime, formatter);
             Predicate<Meeting> endDateTimePredicate = obj -> LocalDateTime.parse(obj.getEndDateTime(), formatter).isBefore(endDate) || obj.getEndDateTime().equals(endDateTime);
             filteringStream = filteringStream.filter(endDateTimePredicate);
         }
-        if(attendeeNumber >= 0) {
+        if(attendeeNumber != null) {
             Predicate<Meeting> attendeeNumberPredicate = obj -> obj.getAttendees().size() > attendeeNumber;
             filteringStream = filteringStream.filter(attendeeNumberPredicate);
         }

@@ -21,5 +21,5 @@ public interface MeetingDao {
 
     ResponseEntity<String> removeAttendee(UUID meetingId, UUID attendeeId);
 
-    ResponseEntity<List<Meeting>> listAndFilterMeetings(String description, String responsiblePersonId, String category, String type, String startDateTime, String endDateTime, Integer attendeeNumber);
+    ResponseEntity<List<Meeting>> listAndFilterMeetings(List<Object> filters);
 }

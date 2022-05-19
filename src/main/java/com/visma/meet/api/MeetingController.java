@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -51,13 +52,23 @@ public class MeetingController {
     //localhost:8080/api/v1/meeting/getMeetings?description=  &responsiblePersonId= &category= &type= &startDateTime= &endDateTime= &attendeeNumber=
     @RequestMapping(value = "/getMeetings", method = RequestMethod.GET)
     @ResponseBody
-    public ResponseEntity<List<Meeting>> listAndFilterMeetings(@RequestParam(value = "description", required = true) String description,
-                                                               @RequestParam(value = "responsiblePersonId", required = true) String responsiblePersonId,
-                                                               @RequestParam(value = "category", required = true) String category,
-                                                               @RequestParam(value = "type", required = true) String type,
-                                                               @RequestParam(value = "startDateTime", required = true) String startDateTime,
-                                                               @RequestParam(value = "endDateTime", required = true) String endDateTime,
-                                                               @RequestParam(value = "attendeeNumber", required = true) Integer attendeeNumber){
-        return meetingService.listAndFilterMeetings(description, responsiblePersonId, category, type, startDateTime, endDateTime, attendeeNumber);
+    public ResponseEntity<List<Meeting>> listAndFilterMeetings(@RequestParam(value = "description", required = false) String description,
+                                                               @RequestParam(value = "responsiblePersonId", required = false) String responsiblePersonId,
+                                                               @RequestParam(value = "category", required = false) String category,
+                                                               @RequestParam(value = "type", required = false) String type,
+                                                               @RequestParam(value = "startDateTime", required = false) String startDateTime,
+                                                               @RequestParam(value = "endDateTime", required = false) String endDateTime,
+                                                               @RequestParam(value = "attendeeNumber", required = false) Integer attendeeNumber){
+        List<Object> filters = new ArrayList<>();
+
+        filters.add(description);
+        filters.add(responsiblePersonId);
+        filters.add(category);
+        filters.add(type);
+        filters.add(startDateTime);
+        filters.add(endDateTime);
+        filters.add(attendeeNumber);
+
+        return meetingService.listAndFilterMeetings(filters);
     }
 }

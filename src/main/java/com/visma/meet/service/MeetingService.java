@@ -36,7 +36,7 @@ public class MeetingService {
         return meetingDao.removeAttendee(meetingId, attendeeId);
     }
 
-    public ResponseEntity<List<Meeting>> listAndFilterMeetings(String description, String responsiblePersonId, String category, String type, String startDateTime, String endDateTime, int attendeeNumber){
-        return meetingDao.listAndFilterMeetings(description, responsiblePersonId, category, type, startDateTime, endDateTime, attendeeNumber);
+    public ResponseEntity<List<Meeting>> listAndFilterMeetings(List<Object> filters){
+        return meetingDao.listAndFilterMeetings(filters);
     }
 }
